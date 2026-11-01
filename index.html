@@ -1,0 +1,5253 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CIT Open House 2027 | 3D Campus Map</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<style>
+
+/* 
+=========================================================
+GLOBAL
+========================================================= 
+*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    overflow:hidden;
+    font-family:'Kanit',sans-serif;
+    background:#071426;
+    color:white;
+}
+
+
+/* 
+=========================================================
+HEADER
+========================================================= 
+*/
+
+.header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:78px;
+    z-index:20;
+
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    padding:10px 22px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(3,12,25,.98),
+            rgba(8,27,48,.96),
+            rgba(3,12,25,.98)
+        );
+
+    border-bottom:2px solid #ff7200;
+
+    box-shadow:
+        0 5px 25px rgba(0,0,0,.4);
+}
+
+.logo{
+    width:55px;
+    height:55px;
+    object-fit:contain;
+    background:white;
+}
+
+.header h1{
+    font-size:21px;
+    font-weight:600;
+}
+
+.header p{
+    color:#ff9638;
+    font-size:12px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-box{
+    position:fixed;
+    top:95px;
+    left:20px;
+    z-index:20;
+
+    width:310px;
+
+    padding:15px;
+
+    background:rgba(5,18,35,.96);
+
+    border:1px solid #ff7200;
+
+    border-radius:12px;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.45);
+}
+
+.search-box h3{
+    color:#ff9638;
+    margin-bottom:10px;
+}
+
+.search-row{
+    display:flex;
+    gap:7px;
+}
+
+.search-row input{
+    flex:1;
+
+    padding:9px;
+
+    border-radius:7px;
+
+    border:1px solid #40546b;
+
+    background:#102238;
+
+    color:white;
+
+    outline:none;
+
+    font-family:'Kanit';
+}
+
+.search-row button{
+    border:0;
+    border-radius:7px;
+
+    padding:0 13px;
+
+    color:white;
+
+    background:#f56b00;
+
+    cursor:pointer;
+
+    font-family:'Kanit';
+}
+
+#searchResult{
+    margin-top:8px;
+    font-size:12px;
+    color:#ffb36b;
+}
+
+
+/* =========================================================
+   INFO PANEL
+========================================================= */
+
+.info-panel{
+    position:fixed;
+    top:95px;
+    right:20px;
+
+    width:330px;
+    max-height:70vh;
+
+    overflow:auto;
+
+    z-index:20;
+
+    padding:18px;
+
+    background:rgba(5,18,35,.97);
+
+    border:1px solid #ff7200;
+
+    border-radius:12px;
+
+    display:none;
+
+    box-shadow:
+        0 12px 40px rgba(0,0,0,.5);
+}
+
+.info-panel.show{
+    display:block;
+}
+
+.close-btn{
+    position:absolute;
+    right:8px;
+    top:5px;
+
+    border:0;
+    background:none;
+
+    color:white;
+
+    font-size:25px;
+
+    cursor:pointer;
+}
+
+.building-type{
+    display:inline-block;
+
+    padding:4px 8px;
+
+    border:1px solid #ff7200;
+
+    border-radius:5px;
+
+    color:#ff9638;
+
+    font-size:11px;
+}
+
+#buildingTitle{
+    margin-top:8px;
+    color:#ff9638;
+}
+
+#buildingDescription{
+    margin-top:8px;
+
+    color:#dce6f0;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+.info-panel h3{
+    margin-top:15px;
+}
+
+.info-panel ul{
+    padding-left:20px;
+    margin-top:8px;
+}
+
+.info-panel li{
+    margin-bottom:6px;
+    font-size:13px;
+}
+
+
+/* =========================================================
+   CONTROL
+========================================================= */
+
+.control-box{
+    position:fixed;
+    left:20px;
+    bottom:20px;
+
+    z-index:20;
+
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+}
+
+.control-box button{
+    padding:9px 13px;
+
+    border:1px solid #ff7200;
+
+    border-radius:8px;
+
+    background:#0b2038;
+
+    color:white;
+
+    font-family:'Kanit';
+
+    cursor:pointer;
+}
+
+.control-box button:hover{
+    background:#f56b00;
+}
+
+
+/* =========================================================
+   HELP
+========================================================= */
+
+.help-text{
+    position:fixed;
+
+    right:20px;
+    bottom:20px;
+
+    z-index:20;
+
+    padding:8px 12px;
+
+    background:rgba(5,15,30,.9);
+
+    border-radius:7px;
+
+    border:1px solid #40546b;
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   BUILDING LABEL
+========================================================= */
+
+.building-label{
+    padding:4px 9px;
+
+    background:rgba(5,15,30,.95);
+
+    border:1px solid #ff7200;
+
+    border-radius:6px;
+
+    color:white;
+
+    font-size:12px;
+
+    white-space:nowrap;
+
+    pointer-events:none;
+}
+
+
+@media(max-width:700px){
+
+    .search-box{
+        width:240px;
+        left:10px;
+        top:85px;
+    }
+
+    .info-panel{
+        width:250px;
+        right:10px;
+        top:85px;
+    }
+
+    .header h1{
+        font-size:15px;
+    }
+
+    .header p{
+        font-size:9px;
+    }
+
+    .help-text{
+        display:none;
+    }
+
+}
+
+/* =====================================
+   MOBILE RESPONSIVE
+===================================== */
+
+@media (max-width: 768px) {
+
+    /* HEADER */
+    .header {
+        height: 65px;
+        padding: 7px 12px;
+        gap: 9px;
+    }
+
+    .logo {
+        width: 45px;
+        height: 45px;
+    }
+
+    .header-text h1 {
+        font-size: 16px;
+    }
+
+    .header-text p {
+        font-size: 9px;
+    }
+
+
+    /* SEARCH BOX */
+    .search-box {
+        top: 78px;
+        left: 10px;
+        width: calc(100% - 20px);
+        max-width: none;
+        padding: 11px;
+    }
+
+    .search-box h3 {
+        font-size: 14px;
+        margin-bottom: 7px;
+    }
+
+    .search-row input {
+        font-size: 13px;
+        padding: 9px;
+    }
+
+    .search-row button {
+        padding: 0 12px;
+        font-size: 13px;
+    }
+
+
+    /* INFO PANEL */
+    .info-panel {
+        top: 78px;
+        right: 10px;
+        left: 10px;
+
+        width: auto;
+        max-height: 55vh;
+
+        padding: 14px;
+    }
+
+    #buildingTitle {
+        font-size: 20px;
+    }
+
+    #buildingDescription {
+        font-size: 12px;
+    }
+
+    .info-panel h3 {
+        font-size: 14px;
+    }
+
+    .info-panel li {
+        font-size: 12px;
+    }
+
+
+    /* BOTTOM BUTTONS */
+    .control-box {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+
+        gap: 5px;
+
+        justify-content: center;
+    }
+
+    .control-box button {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+
+    /* HELP */
+    .help-text {
+        display: none;
+    }
+
+
+    /* STATUS */
+    #status {
+        left: 10px;
+        bottom: 65px;
+        font-size: 10px;
+    }
+
+
+    /* BUILDING LABEL */
+    .building-label {
+        padding: 3px 6px;
+        font-size: 10px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<div class="header">
+
+    <img
+        src="Cit Logo.jpg"
+        class="logo"
+    >
+
+    <div>
+
+        <h1>
+            CIT OPEN HOUSE 2027
+        </h1>
+
+        <p>
+            COLLEGE OF INDUSTRIAL TECHNOLOGY  •  KMUTNB
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     SEARCH
+========================================================= -->
+
+<div class="search-box">
+
+    <h3>🔎 ค้นหาอาคาร / สาขาวิชา</h3>
+
+    <div class="search-row">
+
+        <input
+            id="searchInput"
+            placeholder="เช่น อาคาร 63 หรือ อากาศยาน"
+        >
+
+        <button id="searchButton">
+            ค้นหา
+        </button>
+
+    </div>
+
+    <div id="searchResult"></div>
+
+</div>
+
+
+<!-- =========================================================
+     INFO
+========================================================= -->
+
+<div
+    class="info-panel"
+    id="infoPanel"
+>
+
+    <button
+        class="close-btn"
+        id="closeButton"
+    >
+        ×
+    </button>
+
+    <div
+        class="building-type"
+        id="buildingType"
+    >
+        อาคาร
+    </div>
+
+    <h2 id="buildingTitle"></h2>
+
+    <p id="buildingDescription"></p>
+
+    <h3>
+        สาขาวิชา
+    </h3>
+
+    <ul id="departmentList"></ul>
+
+</div>
+
+
+<!-- =========================================================
+     MAP
+========================================================= -->
+
+<div id="map-container"></div>
+
+
+<!-- =========================================================
+     CONTROLS
+========================================================= -->
+
+<div class="control-box">
+
+    <button id="resetButton">
+        มุมมองเริ่มต้น
+    </button>
+
+    <button id="frontButton">
+        มุมมองด้านหน้า
+    </button>
+
+    <button id="zoomInButton">
+        ＋
+    </button>
+
+    <button id="zoomOutButton">
+        －
+    </button>
+
+    <button id="mapsButton">
+        📍 Google Maps
+    </button>
+
+</div>
+
+
+<div class="help-text">
+    ลาก = หมุน | Scroll = Zoom
+</div>
+
+
+<script type="importmap">
+
+{
+    "imports":{
+        "three":
+        "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+
+        "three/addons/":
+        "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+}
+
+</script>
+
+
+<script type="module">
+
+import * as THREE from 'three';
+
+import {
+    OrbitControls
+}
+from 'three/addons/controls/OrbitControls.js';
+
+import {
+    CSS2DRenderer,
+    CSS2DObject
+}
+from 'three/addons/renderers/CSS2DRenderer.js';
+
+
+/* =========================================================
+   SCENE
+========================================================= */
+
+const container =
+    document.getElementById(
+        'map-container'
+    );
+
+const scene =
+    new THREE.Scene();
+
+scene.background =
+    new THREE.Color(
+        0x071426
+    );
+
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+const camera =
+    new THREE.PerspectiveCamera(
+
+        70,
+
+        window.innerWidth /
+        window.innerHeight,
+
+        .1,
+
+        1500
+
+    );
+
+camera.position.set(
+    0,
+    250,
+    50
+);
+
+
+/* =========================================================
+   RENDERER
+========================================================= */
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        antialias:true
+
+    });
+
+renderer.setPixelRatio(
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
+);
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.shadowMap.enabled =
+    true;
+
+renderer.shadowMap.type =
+    THREE.PCFSoftShadowMap;
+
+container.appendChild(
+    renderer.domElement
+);
+
+
+/* =========================================================
+   LABEL RENDERER
+========================================================= */
+
+const labelRenderer =
+    new CSS2DRenderer();
+
+labelRenderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+labelRenderer.domElement.style.position =
+    'absolute';
+
+labelRenderer.domElement.style.top =
+    '0';
+
+labelRenderer.domElement.style.pointerEvents =
+    'none';
+
+container.appendChild(
+    labelRenderer.domElement
+);
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+const controls =
+    new OrbitControls(
+        camera,
+        renderer.domElement
+    );
+
+controls.enableDamping =
+    true;
+
+controls.dampingFactor =
+    .07;
+
+controls.minDistance =
+    20;
+
+controls.maxDistance =
+    300;
+
+controls.maxPolarAngle =
+    Math.PI / 2.05;
+
+controls.target.set(
+    0,
+    0,
+    10
+);
+
+
+/* =========================================================
+   LIGHT
+========================================================= */
+
+scene.add(
+
+    new THREE.HemisphereLight(
+
+        0xffffff,
+        0x182235,
+        2.3
+
+    )
+
+);
+
+
+const sun =
+    new THREE.DirectionalLight(
+        0xffffff,
+        3
+    );
+
+sun.position.set(
+    -80,
+    150,
+    80
+);
+
+sun.castShadow =
+    true;
+
+sun.shadow.mapSize.width =
+    2048;
+
+sun.shadow.mapSize.height =
+    2048;
+
+scene.add(sun);
+
+
+/* =========================================================
+   GROUND
+========================================================= */
+
+const ground =
+    new THREE.Mesh(
+
+        new THREE.PlaneGeometry(
+            200,
+            200
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color:0x555555,
+
+            roughness:1
+
+        })
+
+    );
+
+    ground.position.set(
+    -18,   // ขยับซ้าย-ขวา
+    0,    // ความสูง
+    37.5    // ขยับหน้า-หลัง
+);
+
+ground.rotation.x =
+    -Math.PI / 2;
+
+ground.receiveShadow =
+    true;
+
+scene.add(ground);
+
+
+/* 
+=========================================================
+ROADS — BUILT TO FOLLOW THE OPEN SPACES BETWEEN BUILDINGS
+========================================================= 
+*/
+
+// ===== ROAD FUNCTION =====
+function createRoad(x, z, width, length, rotation = 0) {
+
+    const roadMaterial = new THREE.MeshStandardMaterial({
+        color: 0x41464b,
+        roughness: 1
+    });
+
+    const road = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            width,
+            0.75,
+            length
+        ),
+        roadMaterial
+    );
+
+    road.position.set(
+        x,
+        1,
+        z
+    );
+
+    road.rotation.y = rotation;
+
+    road.receiveShadow = true;
+    road.castShadow = true;
+
+    scene.add(road);
+}
+
+// ===== ROADS =====
+
+// ถนนแนวตั้ง
+createRoad(-42, 48, 15, 150);
+
+// ถนนแนวตั้งอีกเส้น
+createRoad(66, 37, 10, 50);
+
+// ถนนแนวตั้งอีกเส้น
+createRoad(19, 37, 8, 50);
+
+// ถนนแนวนอน
+createRoad(-4, -20, 14, 80, Math.PI / 2);
+
+// ถนนแนวนอนอีกเส้น
+createRoad(10, 59, 6, 115, Math.PI / 2);
+
+// ถนนแนวนอนอีกเส้น
+createRoad(40, 15, 6, 50, Math.PI / 2);
+
+// ถนนแนวนอนอีกเส้น
+createRoad(-63.5, 14.75, 10, 40, Math.PI / 2);
+
+/*ขอบถนน*/
+function createRoadEdge(
+    x,
+    z,
+    length,
+    width = 0.6,
+    height = 0.2,
+    rotation = 0
+) {
+
+    const edge = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            width,
+            height,
+            length
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x1A1A1A,
+            roughness: 1
+        })
+    );
+
+    edge.position.set(
+        x,
+        height / 2 + 0.05,
+        z
+    );
+
+    edge.rotation.y = rotation;
+
+    scene.add(edge);
+}
+
+// เส้นขอบถนน 1
+createRoadEdge(-35, 21.5, 70.5, 1, 2);
+
+// เส้นขอบถนน 2
+createRoadEdge(-50, -9, 37.5, 1, 2);
+
+// เส้นขอบถนน 3
+createRoadEdge(-50, 71.75, 102.5, 1, 2);
+
+// เส้นขอบถนน 4
+createRoadEdge(-35, 92.5, 61.75, 1, 2);
+
+// เส้นขอบถนน 5
+createRoadEdge(-66.5, 20, 34, 1, 2, Math.PI / 2);
+
+// เส้นขอบถนน 6
+createRoadEdge(-66.5, 10, 34, 1, 2, Math.PI / 2);
+
+// เส้นขอบถนน 7
+createRoadEdge(0.5, -13.5, 72, 1, 2, Math.PI / 2);
+
+// เส้นขอบถนน 8
+createRoadEdge(-7, -27.5, 87, 1, 2, Math.PI / 2);
+
+// เส้นขอบถนน 9
+createRoadEdge(18, 62, 106.5, 1, 2, Math.PI / 2);
+
+// เส้นขอบถนน 10
+createRoadEdge(41.75, 56.5, 40, 1, 2, Math.PI / 2);
+
+// เส้นขอบถนน 11
+createRoadEdge(41.75, 18, 40, 1, 2, Math.PI / 2);
+
+// เส้นขอบถนน 12
+createRoadEdge(61.25, 37.5, 38, 1, 2);
+
+// เส้นขอบถนน 13
+createRoadEdge(22.5, 37.5, 38, 1.5, 2);
+
+// เส้นขอบถนน 14
+createRoadEdge(71, 37, 51, 1, 2);
+
+// เส้นขอบถนน 15
+createRoadEdge(37, -20.5, 15, 1, 2);
+
+// เส้นขอบถนน 16
+createRoadEdge(15, 34.5, 45, 1, 2);
+
+// เส้นขอบถนน 17
+createRoadEdge(43, 12, 57, 1, 2, Math.PI / 2);
+
+// เส้นขอบถนน 18
+createRoadEdge(-10.5, 56.5, 50, 1, 2, Math.PI / 2);
+
+/*เส้นประ*/
+
+function createRoadCenterLine(
+    x,
+    z,
+    length,
+    dashLength = 3,
+    gap = 3,
+    width = 0.25,
+    rotation = 0,
+    y = 1.3
+) {
+
+    const group = new THREE.Group();
+
+    const material =
+        new THREE.MeshBasicMaterial({
+            color: 0xFFD700
+        });
+
+    const count =
+        Math.floor(
+            length / (dashLength + gap)
+        );
+
+    for (let i = 0; i < count; i++) {
+
+        const dash =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    width,
+                    0.08,
+                    dashLength
+                ),
+                material
+            );
+
+        dash.position.z =
+            -length / 2
+            + dashLength / 2
+            + i * (dashLength + gap);
+
+        group.add(dash);
+    }
+
+    group.position.set(
+        x,
+        y,
+        z
+    );
+
+    group.rotation.y =
+        rotation;
+
+    scene.add(group);
+
+    return group;
+}
+
+// เส้นที่ 1
+createRoadCenterLine(
+    -42.5,      // X
+    54.5,      // Z
+    151,    // ความยาวเส้นทั้งหมด
+    4,      // เส้นประแต่ละช่วงยาว 4
+    4,      // เว้นระยะ 4
+    0.3,    // ความกว้างเส้น
+    0,      // มุมหมุน
+    1.5     // ความสูง
+);
+
+// เส้นที่ 2
+createRoadCenterLine(
+    66,      // X
+    40.5,      // Z
+    50,    // ความยาวเส้นทั้งหมด
+    4,      // เส้นประแต่ละช่วงยาว 4
+    4,      // เว้นระยะ 4
+    0.3,    // ความกว้างเส้น
+    0,      // มุมหมุน
+    1.5     // ความสูง
+);
+
+// เส้นที่ 3
+createRoadCenterLine(
+    18.5,      // X
+    40.5,      // Z
+    50,    // ความยาวเส้นทั้งหมด
+    4,      // เส้นประแต่ละช่วงยาว 4
+    4,      // เว้นระยะ 4
+    0.3,    // ความกว้างเส้น
+    0,      // มุมหมุน
+    1.5     // ความสูง
+);
+
+// เส้นที่ 4
+createRoadCenterLine(
+    46.75,              // X
+    15,             // Z
+    45,               // ความยาวเส้นทั้งหมด
+    4,                // เส้นประแต่ละช่วงยาว 4
+    4,                // เว้นระยะ 4
+    0.3,              // ความกว้างเส้น
+    Math.PI / 2,      // มุมหมุน
+    1.5               // ความสูง
+);
+
+// เส้นที่ 5
+createRoadCenterLine(
+    46.5,             // X
+    59.25,             // Z
+    45,               // ความยาวเส้นทั้งหมด
+    4,                // เส้นประแต่ละช่วงยาว 4
+    4,                // เว้นระยะ 4
+    0.3,              // ความกว้างเส้น
+    Math.PI / 2,      // มุมหมุน
+    1.5               // ความสูง
+);
+
+// เส้นที่ 6
+createRoadCenterLine(
+    -5.75,             // X
+    59.25,             // Z
+    59.5,               // ความยาวเส้นทั้งหมด
+    4,                // เส้นประแต่ละช่วงยาว 4
+    6,                // เว้นระยะ 4
+    0.3,              // ความกว้างเส้น
+    Math.PI / 2,      // มุมหมุน
+    1.5               // ความสูง
+);
+
+// เส้นที่ 6
+createRoadCenterLine(
+    1.5,             // X
+    -20.5,             // Z
+    76,               // ความยาวเส้นทั้งหมด
+    4,                // เส้นประแต่ละช่วงยาว 4
+    5,                // เว้นระยะ 4
+    0.3,              // ความกว้างเส้น
+    Math.PI / 2,      // มุมหมุน
+    1.5               // ความสูง
+);
+
+// เส้นที่ 7
+createRoadCenterLine(
+    -60,             // X
+    14.75,             // Z
+    35,               // ความยาวเส้นทั้งหมด
+    4,                // เส้นประแต่ละช่วงยาว 4
+    6,                // เว้นระยะ 4
+    0.3,              // ความกว้างเส้น
+    Math.PI / 2,      // มุมหมุน
+    1.5               // ความสูง
+);
+
+
+/*จบเส้นประ*/
+
+/*ขอบถนนจบ*/
+
+/* =========================================================
+   BRIDGE
+   ไม่มีแม่น้ำ
+========================================================= */
+
+function createArchBridge(
+    x,
+    z,
+    length = 40,
+    width = 8,
+    height = 10,
+    rotation = 0,
+    bridgeColor = 0x9E9E9E,
+    edgeColor = 0xD9D9D9
+) {
+
+    const group = new THREE.Group();
+
+    // =====================================
+    // วัสดุตัวสะพาน
+    // =====================================
+
+    const bridgeMaterial =
+        new THREE.MeshStandardMaterial({
+            color: bridgeColor,
+            roughness: 0.8
+        });
+
+    // =====================================
+    // วัสดุขอบสะพาน
+    // =====================================
+
+    const edgeMaterial =
+        new THREE.MeshStandardMaterial({
+            color: edgeColor,
+            roughness: 0.8
+        });
+
+
+    const segments = 40;
+    const radius = length / 2;
+
+
+    // =====================================
+    // พื้นสะพาน
+    // =====================================
+
+    for (let i = 0; i < segments; i++) {
+
+        const t1 =
+            i / segments * Math.PI;
+
+        const t2 =
+            (i + 1) / segments * Math.PI;
+
+        const x1 =
+            -radius * Math.cos(t1);
+
+        const x2 =
+            -radius * Math.cos(t2);
+
+        const y1 =
+            height * Math.sin(t1);
+
+        const y2 =
+            height * Math.sin(t2);
+
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+
+        const segmentLength =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+
+        const angle =
+            -Math.atan2(dy, dx);
+
+        const segment =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    segmentLength,
+                    0.8,
+                    width
+                ),
+                bridgeMaterial
+            );
+
+        segment.position.set(
+            (x1 + x2) / 2,
+            (y1 + y2) / 2,
+            0
+        );
+
+        segment.rotation.z = angle;
+
+        group.add(segment);
+    }
+
+
+    // =====================================
+    // ขอบสะพาน
+    // =====================================
+
+    const edgeHeight = 1.2;
+    const edgeWidth = 0.5;
+
+    for (let i = 0; i < segments; i++) {
+
+        const t1 =
+            i / segments * Math.PI;
+
+        const t2 =
+            (i + 1) / segments * Math.PI;
+
+        const x1 =
+            -radius * Math.cos(t1);
+
+        const x2 =
+            -radius * Math.cos(t2);
+
+        const y1 =
+            height * Math.sin(t1);
+
+        const y2 =
+            height * Math.sin(t2);
+
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+
+        const segmentLength =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+
+        const angle =
+            -Math.atan2(dy, dx);
+
+
+        // ขอบซ้าย
+        const leftEdge =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    segmentLength,
+                    edgeHeight,
+                    edgeWidth
+                ),
+                edgeMaterial
+            );
+
+        leftEdge.position.set(
+            (x1 + x2) / 2,
+            (y1 + y2) / 2 + 0.8,
+            width / 2 - edgeWidth / 2
+        );
+
+        leftEdge.rotation.z = angle;
+
+        group.add(leftEdge);
+
+
+        // ขอบขวา
+        const rightEdge =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    segmentLength,
+                    edgeHeight,
+                    edgeWidth
+                ),
+                edgeMaterial
+            );
+
+        rightEdge.position.set(
+            (x1 + x2) / 2,
+            (y1 + y2) / 2 + 0.8,
+            -width / 2 + edgeWidth / 2
+        );
+
+        rightEdge.rotation.z = angle;
+
+        group.add(rightEdge);
+    }
+
+
+    // =====================================
+    // ตำแหน่งสะพาน
+    // =====================================
+
+    group.position.set(
+        x,
+        0.5,
+        z
+    );
+
+    group.rotation.y =
+        rotation;
+
+    scene.add(group);
+
+    return group;
+}
+
+createArchBridge(
+    -100.5, 15,
+    32, 12, 12,
+    0,
+    0x925946,
+    0x72342A
+);
+
+/* =========================================================
+   BUILDINGS
+========================================================= */
+
+const buildings = [
+
+
+{
+        id:64,
+        name:'อาคาร 64',
+        type:'อาคาร CIT',
+
+        x:-59.5,
+        z:-20,
+
+        width:15,
+        depth:50,
+        height:11,
+
+        color:0xb5bec5,
+
+        description:
+        'อาคารสำหรับการเรียนการสอนและปฏิบัติการด้านระบบทำความเย็นและการปรับอากาศ',
+
+        departments:[
+            'เทคโนโลยีวิศวกรรมการทำความเย็นและการปรับอากาศ'
+        ]
+    },
+
+
+    {
+        id:64,
+        name:'อาคาร 64',
+        type:'อาคาร CIT',
+
+        x:-48,
+        z:-38,
+
+        width:38,
+        depth:18,
+        height:22,
+
+        color:0xb5bec5,
+
+        description:
+        'อาคารสำหรับการเรียนการสอนและปฏิบัติการด้านระบบทำความเย็นและการปรับอากาศ',
+
+        departments:[
+            'เทคโนโลยีวิศวกรรมการทำความเย็นและการปรับอากาศ'
+        ]
+    },
+
+
+    {
+        id:52,
+        name:'คณะ ครุศาสตร์อุตสาหกรรม',
+        type:'อาคาร 52',
+
+        x:-61,
+        z:49.5,
+
+        width:17,
+        depth:50,
+        height:35,
+
+        color:0xb5bec5,
+
+        description:
+        'อาคารสำหรับการเรียนการสอน',
+
+        departments:[
+            'สอบถามทางคณะครุศาสตร์อุตสาหกรรม'
+        ]
+    },
+
+
+    {
+        id:65,
+        name:'CIT',
+        type:'อาคาร 65',
+
+        x:-12.5,
+        z:-37,
+
+        width:27,
+        depth:16,
+        height:30,
+
+        color:0xb9c0c5,
+
+        description:
+        'อาคารสำหรับการเรียนการสอน',
+
+        departments:[
+            'วิทยาลัยเทคโนโลยีอุตสาหกรรม'
+        ]
+    },
+
+
+    {
+        id:66,
+        name:'CIT',
+        type:'อาคาร 66, 67 และ 68',
+
+        x:20,
+        z:-37,
+
+        width:33,
+        depth:16,
+        height:13,
+
+        color:0xb9c0c5,
+
+        description:
+        'อาคารสำหรับการเรียนการสอน',
+
+        departments:[
+            'งานประลองทางวิศวกรรม'
+        ]
+    },
+
+
+    {
+        id:69,
+        name:'อาคาร 69',
+        type:'อาคาร CIT',
+
+        x:49,
+        z:-34,
+
+        width:20,
+        depth:40,
+        height:14,
+
+        color:0xb5bdc3,
+
+        description:
+        'อาคารสำหรับงานด้านพอลิเมอร์และอุตสาหกรรมยาง',
+
+        departments:[
+            'เทคโนโลยีวิศวกรรมพอลิเมอร์และอุตสาหกรรมยาง'
+        ]
+    },
+
+
+    {
+        id:62,
+        name:'อาคาร 62',
+        type:'อาคารหลัก CIT',
+
+        x:14,
+        z:0,
+
+        width:90,
+        depth:20,
+        height:20,
+
+        color:0xc3c9cd,
+
+        description:
+        'อาคารหลักของวิทยาลัยเทคโนโลยีอุตสาหกรรม',
+
+        departments:[
+
+            'เทคโนโลยีวิศวกรรมการออกแบบและผลิตเครื่องจักรกล',
+
+            'เทคโนโลยีวิศวกรรมแม่พิมพ์และเครื่องมือ',
+
+            'เทคโนโลยีวิศวกรรมแมคคาทรอนิกส์',
+
+            'เทคโนโลยีวิศวกรรมการเชื่อม',
+
+            'เทคโนโลยีวิศวกรรมซ่อมบำรุงอากาศยาน',
+
+            'เทคโนโลยีวิศวกรรมไฟฟ้าและอิเล็กทรอนิกส์กำลัง',
+
+            'เทคโนโลยีวิศวกรรมอิเล็กทรอนิกส์',
+
+            'เทคโนโลยีวิศวกรรมพอลิเมอร์และอุตสาหกรรมยาง'
+
+        ]
+    },
+
+
+    {
+        id:63,
+        name:'อาคาร 63',
+        type:'อาคาร CIT',
+
+        x:-9,
+        z:34,
+
+        width:45,
+        depth:42,
+        height:18,
+
+        color:0xb4bcc2,
+
+        description:
+        'อาคารสำหรับเทคโนโลยีวิศวกรรมยานยนต์',
+
+        departments:[
+            'เทคโนโลยีวิศวกรรมยานยนต์'
+        ]
+    },
+
+
+    {
+        id:42,
+        name:'อาคาร 42',
+        type:'อาคารเรียนและปฏิบัติการ',
+
+        x:24,
+        z:99,
+
+        width:70,
+        depth:30,
+        height:35,
+
+        color:0xc0c6ca,
+
+        description:
+        'อาคารเรียนและปฏิบัติการ',
+
+        departments:[
+
+            'เทคโนโลยีวิศวกรรมอุตสาหการ',
+
+            'วิศวกรรมโยธาและเทคโนโลยี'
+
+        ]
+    },
+
+    {
+        id:44,
+        name:'คณะ ครุศาสตร์อุตสาหกรรม',
+        type:'อาคาร 44',
+
+        x:-27.75,
+        z:102.75,
+
+        width:12,
+        depth:39.5,
+        height:35,
+
+        color:0xc0c6ca,
+
+        description:
+        'อาคารเรียนปฏิบัติการและประลองรวม',
+
+        departments:[
+
+             'สอบถามทางคณะครุศาสตร์อุตสาหกรรม'
+
+        ]
+    },
+
+    {
+        id:43,
+        name:'สถาบันนวัตกรรมเทคโนโลยีไทย-ฝรั่งเศส',
+        type:'อาคาร 43',
+
+        x:-17.5,
+        z:102.75,
+
+        width:6,
+        depth:30,
+        height:30,
+
+        color:0xc0c6ca,
+
+        description:
+        'อาคารสำหรับการเรียนการสอน',
+
+        departments:[
+
+             'วิทยาลัยเทคโนโลยีอุตสาหกรรม'
+
+        ]
+    },
+
+
+
+     {
+        id:41,
+        name:'คณะ สถาปัตยกรรมและการออกแบบ',
+        type:'อาคาร 41',
+
+        x:31.5,
+        z:72,
+
+        width:55,
+        depth:17,
+        height:25,
+
+        color:0xc0c6ca,
+
+        description:
+        'อาคารสำหรับการเรียนการสอน',
+
+        departments:[
+
+            'สอบถามทางคณะสถาปัตยกรรมและการออกแบบ',
+
+        ]
+    }
+
+];
+
+/* =========================================================
+   ID-SPECIFIC BUILDING DECORATION
+   แก้เฉพาะฟังก์ชันของ ID ที่ต้องการตกแต่ง
+   ไม่แตะข้อมูลอาคาร / ระบบค้นหา / กล้อง / UI
+========================================================= */
+
+function decorateBuildingID64_A(data, group){
+    // อาคาร 64 ส่วน A: x:-59.5, z:-20
+}
+
+function decorateBuildingID64_B(data, group){
+    // อาคาร 64 ส่วน B: x:-48, z:-38
+}
+
+function decorateBuildingID52(data, group){
+    // อาคาร 52 : คณะครุศาสตร์อุตสาหกรรม
+    // อ้างอิงรูปทรงจากภาพตัวอย่าง: อาคารยาวหลายชั้น,
+    // กระจกบริเวณหัวอาคาร, แกนสีแดง, ระเบียงยื่น และหลังคายื่น
+
+    const facadeWhite = new THREE.MeshStandardMaterial({
+        color:0xe7eaec,
+        roughness:.68,
+        metalness:.02
+    });
+
+    const facadeDark = new THREE.MeshStandardMaterial({
+        color:0x4b5258,
+        roughness:.72,
+        metalness:.02
+    });
+
+    const glass = new THREE.MeshStandardMaterial({
+        color:0x8fc5cb,
+        roughness:.18,
+        metalness:.08,
+        transparent:true,
+        opacity:.72
+    });
+
+    const glassDark = new THREE.MeshStandardMaterial({
+        color:0x244f57,
+        roughness:.2,
+        metalness:.12,
+        transparent:true,
+        opacity:.82
+    });
+
+    const red = new THREE.MeshStandardMaterial({
+        color:0xc94b45,
+        roughness:.6,
+        metalness:.03
+    });
+
+    const redDark = new THREE.MeshStandardMaterial({
+        color:0x9f3531,
+        roughness:.65,
+        metalness:.02
+    });
+
+    const railing = new THREE.MeshStandardMaterial({
+        color:0xf1f2f2,
+        roughness:.55,
+        metalness:.08
+    });
+
+    const addBox = (w,h,d,x,y,z,material,building=true) => {
+        const mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(w,h,d),
+            material
+        );
+        mesh.position.set(x,y,z);
+        if(building) mesh.userData.building = data;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        group.add(mesh);
+        return mesh;
+    };
+
+    // แผงสีแดงแนวตั้งบนผนังด้านยาวทั้งสองฝั่ง
+    addBox(.16, data.height-4, 5.2, data.width/2+.13, data.height/2+.2, -4.5, red);
+    addBox(.16, data.height-4, 5.2, -data.width/2-.13, data.height/2+.2, -4.5, red);
+
+    // ซี่แนวนอนบนแผงแดง ให้ใกล้เคียงลักษณะผนังระแนงในภาพ
+    for(let i=0;i<12;i++){
+        const y = 5 + i*2.25;
+        addBox(.22,.12,5.0, data.width/2+.22,y,-4.5,redDark);
+        addBox(.22,.12,5.0,-data.width/2-.22,y,-4.5,redDark);
+    }
+
+    // กล่องกระจกบริเวณหัวอาคาร
+    const glassTowerZ = -20.5;
+    addBox(5.8, data.height-3, 5.8, data.width/2+.18, data.height/2+1, glassTowerZ, glass);
+    addBox(5.8, data.height-3, 5.8, -data.width/2-.18, data.height/2+1, glassTowerZ, glass);
+
+    // เสากรอบกระจกแนวตั้ง
+    for(let i=0;i<4;i++){
+        const x = data.width/2+.25 + (i-1.5)*1.65;
+        addBox(.12,data.height-4,.14,x,data.height/2+1,glassTowerZ-3.0,facadeDark);
+        addBox(.12,data.height-4,.14,x,data.height/2+1,glassTowerZ+3.0,facadeDark);
+    }
+
+    // หน้าต่างกระจกเล็กบนหัวอาคาร
+    for(let row=0; row<6; row++){
+        const y = 4.2 + row*4.45;
+        addBox(.14,2.15,1.35,data.width/2+.32,y,glassTowerZ-2.0,glassDark);
+        addBox(.14,2.15,1.35,data.width/2+.32,y,glassTowerZ+.15,glassDark);
+        addBox(.14,2.15,1.35,-data.width/2-.32,y,glassTowerZ-2.0,glassDark);
+        addBox(.14,2.15,1.35,-data.width/2-.32,y,glassTowerZ+.15,glassDark);
+    }
+
+    // ระเบียงยื่นเรียงตามด้านยาวของอาคาร
+    const balconyZ = [-13,-6,1,8,15];
+    balconyZ.forEach((z,i)=>{
+        const y = 7 + i*4.8;
+
+        addBox(2.0,.35,3.6,data.width/2+1.05,y,z,facadeWhite);
+        addBox(2.0,.35,3.6,-data.width/2-1.05,y,z,facadeWhite);
+
+        // ผนัง/ราวกันตกด้านหน้าแต่ละระเบียง
+        addBox(.12,1.15,3.55,data.width/2+2.02,y+.65,z,railing);
+        addBox(.12,1.15,3.55,-data.width/2-2.02,y+.65,z,railing);
+    });
+
+    // แผงหน้าต่างยาวด้านข้างอาคาร
+    for(let row=0; row<6; row++){
+        const y = 5.2 + row*4.55;
+        for(let i=0; i<6; i++){
+            const z = -15 + i*6.0;
+            addBox(.12,2.0,3.6,data.width/2+.22,y,z,glassDark);
+            addBox(.12,2.0,3.6,-data.width/2-.22,y,z,glassDark);
+        }
+    }
+
+    // กรอบแนวตั้งแบ่งช่วงอาคาร
+    for(let i=0;i<8;i++){
+        const z = -22 + i*6.2;
+        addBox(.22,data.height-3,.24,data.width/2+.28,data.height/2,z,facadeWhite);
+        addBox(.22,data.height-3,.24,-data.width/2-.28,data.height/2,z,facadeWhite);
+    }
+
+    // หลังคายื่นแบบแผ่นบางตามรูปอาคาร
+    addBox(data.width+4.5,1.0,data.depth+2.5,0,data.height+1.25,0,facadeDark);
+    addBox(data.width+1.5,.45,data.depth+1.2,0,data.height+1.85,0,facadeWhite);
+
+    // กันสาดบริเวณหัวอาคาร
+    addBox(data.width+2.5,.45,4.8,0,data.height-1.5,-21.5,facadeDark);
+
+    // ชั้นฐานด้านล่างให้ดูเป็นทางเข้า/โถงอาคาร
+    addBox(data.width+.8,1.2,4.8,0,2.0,-20.5,facadeWhite);
+    addBox(data.width+.9,.35,5.2,0,1.2,-20.5,facadeDark);
+
+    // เสารับกันสาดด้านหน้า
+    for(let x=-5; x<=5; x+=2.5){
+        addBox(.22,3.2,.22,x,2.8,-22.2,facadeDark);
+    }
+}
+
+function decorateBuildingID65(data, group){
+    // อาคาร 65 : อาคารสูงทรงสี่เหลี่ยม เน้นแผงครีบแนวนอน,
+    // ช่องกระจกด้านหน้า, โถงทางเข้า และรายละเอียดรอบอาคารตามภาพจริง
+
+    const white = new THREE.MeshStandardMaterial({
+        color:0xe5e8e9,
+        roughness:.72,
+        metalness:.02
+    });
+
+    const whiteDark = new THREE.MeshStandardMaterial({
+        color:0xb9bec1,
+        roughness:.76,
+        metalness:.02
+    });
+
+    const gray = new THREE.MeshStandardMaterial({
+        color:0x70777b,
+        roughness:.80,
+        metalness:.02
+    });
+
+    const dark = new THREE.MeshStandardMaterial({
+        color:0x252c30,
+        roughness:.82,
+        metalness:.02
+    });
+
+    const glass = new THREE.MeshStandardMaterial({
+        color:0x376b72,
+        roughness:.24,
+        metalness:.08,
+        transparent:true,
+        opacity:.82
+    });
+
+    const glassDark = new THREE.MeshStandardMaterial({
+        color:0x173d44,
+        roughness:.28,
+        metalness:.12,
+        transparent:true,
+        opacity:.88
+    });
+
+    const greenGlass = new THREE.MeshStandardMaterial({
+        color:0x2e7770,
+        roughness:.22,
+        metalness:.06,
+        transparent:true,
+        opacity:.86
+    });
+
+    const addBox = (w,h,d,x,y,z,material) => {
+        const mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(w,h,d),
+            material
+        );
+        mesh.position.set(x,y,z);
+        mesh.userData.building = data;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        group.add(mesh);
+        return mesh;
+    };
+
+    const frontZ = -data.depth/2 - .18;
+    const backZ  =  data.depth/2 + .18;
+    const leftX  = -data.width/2 - .18;
+    const rightX =  data.width/2 + .18;
+
+    // =========================================================
+    // ด้านหน้า : ชั้นอาคารซ้อนเป็นขั้น + แผงแนวนอนแบบอาคารจริง
+    // =========================================================
+
+    // แผงครีบ/กันแดดแนวนอนขนาดใหญ่แต่ละชั้น
+    for(let floor=0; floor<7; floor++){
+        const y = 4.0 + floor*3.72;
+        const width = data.width + 1.2 - floor*.45;
+
+        addBox(width,.58,1.25,0,y,frontZ-.55,white);
+        addBox(width-.75,.12,.16,0,y+.33,frontZ-1.18,whiteDark);
+
+        // เส้นแบ่งแผงเพื่อให้ดูเป็นแผ่น facade
+        for(let x=-11; x<=11; x+=5.5){
+            addBox(.08,1.05,.08,x,y+.10,frontZ-1.22,whiteDark);
+        }
+
+        // ช่องกระจกแคบเหนือแผง
+        addBox(data.width-2.2,1.05,.12,0,y+1.02,frontZ-.16,glassDark);
+    }
+
+    // เสาแนวตั้งบริเวณหน้าตึก
+    for(let x=-11.2; x<=11.2; x+=5.6){
+        addBox(.28,data.height-2.5,.34,x,data.height/2,frontZ-.28,whiteDark);
+    }
+
+    // =========================================================
+    // โถงทางเข้าด้านล่าง : กระจกสีเขียว + เสากลม
+    // =========================================================
+
+    addBox(data.width-2.0,4.7,.18,0,2.65,frontZ-1.05,greenGlass);
+
+    for(let x=-10; x<=10; x+=5){
+        addBox(.18,4.35,.24,x,2.65,frontZ-1.22,dark);
+    }
+
+    // กรอบทางเข้าด้านหน้า
+    addBox(data.width-1.2,.32,.34,0,5.05,frontZ-1.25,white);
+    addBox(data.width-1.2,.25,.34,0,.35,frontZ-1.25,white);
+
+    // เสาทรงกระบอก 2 ต้นตามภาพ
+    const columnMat = new THREE.MeshStandardMaterial({
+        color:0x8c9193,
+        roughness:.62,
+        metalness:.12
+    });
+
+    [-8.2,8.2].forEach(x=>{
+        const column = new THREE.Mesh(
+            new THREE.CylinderGeometry(1.05,1.05,5.9,20),
+            columnMat
+        );
+        column.position.set(x,2.95,frontZ-1.65);
+        column.userData.building = data;
+        column.castShadow = true;
+        column.receiveShadow = true;
+        group.add(column);
+    });
+
+    // กันสาดเหนือโถงทางเข้า
+    addBox(data.width+1.2,.65,3.0,0,5.55,frontZ-1.35,white);
+    addBox(data.width+.7,.18,2.6,0,5.90,frontZ-1.38,whiteDark);
+
+    // =========================================================
+    // ด้านซ้าย-ขวา : ช่องหน้าต่างแคบต่อเนื่อง
+    // =========================================================
+
+    function decorateSide(x, side){
+        // แถบผนังข้างอาคาร
+        addBox(.24,data.height-.8,data.depth-.5,x,data.height/2,0,white);
+
+        // หน้าต่างแนวนอนทุกชั้น
+        for(let floor=0; floor<7; floor++){
+            const y = 3.4 + floor*3.72;
+
+            addBox(.13,1.10,data.depth-3.0,x+side*.12,y,0,glassDark);
+
+            // กรอบแบ่งช่อง
+            for(let z=-5; z<=5; z+=3.3){
+                addBox(.16,1.38,.08,x+side*.20,y,z,whiteDark);
+            }
+
+            // แถบผนังระหว่างชั้น
+            addBox(.18,.30,data.depth-.8,x+side*.12,y-1.0,0,gray);
+        }
+
+        // ช่องกระจกแนวตั้งบริเวณด้านหลัง
+        addBox(.15,12.5,4.0,x+side*.18,10.5,1.6,glass);
+        for(let y=5; y<=16; y+=3.6){
+            addBox(.20,.16,4.1,x+side*.25,y,1.6,whiteDark);
+        }
+
+        // แผงบังแดดแนวตั้ง
+        for(let z=-6.5; z<=6.5; z+=2.2){
+            addBox(.18,15.5,.22,x+side*.24,10.5,z,gray);
+        }
+    }
+
+    decorateSide(leftX,-1);
+    decorateSide(rightX,1);
+
+    // =========================================================
+    // ด้านหลัง : ช่องหน้าต่างยาว + แผงแนวนอน
+    // =========================================================
+
+    for(let floor=0; floor<7; floor++){
+        const y = 3.6 + floor*3.72;
+
+        addBox(data.width-2.0,1.35,.14,0,y,backZ,glassDark);
+        addBox(data.width+.8,.30,1.05,0,y-1.0,backZ+.55,white);
+
+        for(let x=-10; x<=10; x+=5){
+            addBox(.10,1.55,.18,x,y,backZ+.12,whiteDark);
+        }
+    }
+
+    // เสาหลังอาคาร
+    for(let x=-11.2; x<=11.2; x+=5.6){
+        addBox(.25,data.height-2.0,.30,x,data.height/2,backZ+.16,whiteDark);
+    }
+
+    // =========================================================
+    // ด้านบน : ขอบหลังคาและแผงขั้นบนสุด
+    // =========================================================
+
+    addBox(data.width+1.0,.55,data.depth+.8,0,data.height+.25,0,white);
+    addBox(data.width-.5,.28,data.depth+.35,0,data.height+.70,0,whiteDark);
+
+    // แผงแนวนอนบนยอดอาคาร
+    for(let i=0;i<3;i++){
+        addBox(data.width-1.2-i*.7,.28,.55,0,data.height+.95+i*.42,frontZ-.45,white);
+    }
+
+    // ส่วนผนังข้างยอดที่สูงกว่าปกติเล็กน้อย
+    addBox(.32,3.0,data.depth+.2,rightX+.18,data.height+1.2,0,whiteDark);
+    addBox(.32,3.0,data.depth+.2,leftX-.18,data.height+1.2,whiteDark);
+
+    // =========================================================
+    // รายละเอียดฐานด้านข้าง/ทางเข้าให้เชื่อมกับพื้นอาคาร
+    // =========================================================
+
+    addBox(data.width+1.4,.25,data.depth+.8,0,.55,0,whiteDark);
+
+    // แผงผนังเข้มใต้โถง
+    addBox(data.width-.8,1.0,.16,0,1.0,frontZ-.45,dark);
+}
+
+function decorateBuildingID66(data, group){
+    // อาคาร 66, 67, 68
+}
+
+function decorateBuildingID69(data, group){
+    // อาคาร 69
+}
+
+function decorateBuildingID62(data, group){
+    // อาคาร 62 : อาคารหลัก CIT
+    // ตกแต่งรอบอาคารให้ใกล้เคียงภาพอาคารจริง:
+    // อาคารยาวหลายชั้น, ระเบียงต่อเนื่อง, ผนังเทา-ขาว,
+    // กระจกจำนวนมาก และแถบสีแดง-ขาว-น้ำเงิน
+
+    const facadeWhite = new THREE.MeshStandardMaterial({
+        color:0xe3e5e6,
+        roughness:.72,
+        metalness:.02
+    });
+
+    const facadeLight = new THREE.MeshStandardMaterial({
+        color:0xc8ccce,
+        roughness:.76,
+        metalness:.02
+    });
+
+    const facadeGray = new THREE.MeshStandardMaterial({
+        color:0x858c91,
+        roughness:.78,
+        metalness:.02
+    });
+
+    const darkGray = new THREE.MeshStandardMaterial({
+        color:0x3f464a,
+        roughness:.80,
+        metalness:.02
+    });
+
+    const glass = new THREE.MeshStandardMaterial({
+        color:0x607982,
+        roughness:.25,
+        metalness:.18,
+        transparent:true,
+        opacity:.80
+    });
+
+    const red = new THREE.MeshStandardMaterial({
+        color:0xe14b3c,
+        roughness:.62,
+        metalness:.02
+    });
+
+    const blue = new THREE.MeshStandardMaterial({
+        color:0x4d6c83,
+        roughness:.62,
+        metalness:.02
+    });
+
+    function addBox(w,h,d,x,y,z,material){
+        const mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(w,h,d),
+            material
+        );
+        mesh.position.set(x,y,z);
+        mesh.userData.building = data;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        group.add(mesh);
+        return mesh;
+    }
+
+    const frontZ = -data.depth/2 - .18;
+    const backZ  =  data.depth/2 + .18;
+    const leftX  = -data.width/2 - .18;
+    const rightX =  data.width/2 + .18;
+
+    // =========================================================
+    // ด้านหน้าอาคาร : ระเบียงยาวต่อเนื่องและช่องกระจก
+    // =========================================================
+    for(let floor=0; floor<4; floor++){
+        const y = 3.2 + floor*4.05;
+
+        // แผงกระจก/หน้าต่างต่อเนื่อง
+        addBox(data.width-.9,2.35,.20,0,y,frontZ,glass);
+
+        // พื้นระเบียงยื่นออกมา
+        addBox(data.width+1.0,.38,2.15,0,y-1.55,frontZ-.82,facadeWhite);
+
+        // ขอบระเบียง
+        addBox(data.width+.8,.25,.20,0,y-1.18,frontZ-1.78,facadeGray);
+
+        // ราวระเบียง
+        addBox(data.width+.15,.14,.14,0,y-.42,frontZ-1.82,facadeLight);
+        addBox(data.width+.15,.14,.14,0,y-1.05,frontZ-1.82,facadeLight);
+
+        for(let x=-42; x<=42; x+=6){
+            addBox(.11,.92,.11,x,y-.75,frontZ-1.82,facadeGray);
+        }
+    }
+
+    // เสาแบ่งช่วงด้านหน้า
+    for(let x=-40.5; x<=40.5; x+=13.5){
+        addBox(.38,18.0,.42,x,9.7,frontZ-.20,facadeWhite);
+    }
+
+    // ช่องหน้าต่างย่อยด้านหน้า
+    for(let floor=0; floor<4; floor++){
+        const y = 3.25 + floor*4.05;
+        for(let x=-36; x<=36; x+=8){
+            addBox(4.9,1.55,.12,x,y,frontZ-.14,glass);
+        }
+    }
+
+    // แถบสีประจำอาคารด้านหน้า
+    function stripeFront(x,y,h=3.8){
+        const r = addBox(1.15,h,.16,x,y,frontZ-1.94,red);
+        r.rotation.z = -0.34;
+
+        const w = addBox(.58,h,.16,x+1.18,y,frontZ-1.95,facadeWhite);
+        w.rotation.z = -0.34;
+
+        const b = addBox(.90,h,.16,x+1.90,y,frontZ-1.96,blue);
+        b.rotation.z = -0.34;
+    }
+
+    stripeFront(-31,4.8);
+    stripeFront(17,8.85);
+    stripeFront(-8,12.9);
+    stripeFront(30,16.95);
+
+    // โถง/ส่วนหน้าที่เด่นบริเวณกลางอาคาร
+    addBox(20.0,6.0,3.0,0,3.0,frontZ-1.62,facadeWhite);
+    addBox(18.2,4.25,.22,0,3.25,frontZ-3.18,glass);
+
+    for(let x=-7.5; x<=7.5; x+=3.75){
+        addBox(.18,4.05,.26,x,3.25,frontZ-3.34,darkGray);
+    }
+
+    addBox(21.0,.50,4.4,0,6.25,frontZ-2.05,facadeWhite);
+    addBox(19.0,.18,4.0,0,5.98,frontZ-2.05,darkGray);
+
+    for(let x=-8; x<=8; x+=5.3){
+        addBox(.52,5.8,.58,x,3.0,frontZ-3.0,facadeWhite);
+    }
+
+    // =========================================================
+    // ด้านหลังอาคาร : ให้มีรายละเอียด ไม่ปล่อยเป็นกล่องโล่ง
+    // =========================================================
+    for(let floor=0; floor<4; floor++){
+        const y = 3.2 + floor*4.05;
+
+        addBox(data.width-.9,2.45,.20,0,y,backZ,glass);
+
+        // แถบพื้นแต่ละชั้น
+        addBox(data.width+.65,.34,1.45,0,y-1.55,backZ+.62,facadeWhite);
+        addBox(data.width+.45,.22,.18,0,y-1.16,backZ+1.36,facadeGray);
+
+        // ช่องหน้าต่างด้านหลัง
+        for(let x=-39; x<=39; x+=7.8){
+            addBox(4.7,1.55,.12,x,y,backZ+.14,glass);
+        }
+    }
+
+    // เสาหลังอาคาร
+    for(let x=-40.5; x<=40.5; x+=13.5){
+        addBox(.38,18.0,.40,x,9.7,backZ+.20,facadeWhite);
+    }
+
+    // แถบสีด้านหลัง
+    function stripeBack(x,y){
+        const r = addBox(1.05,3.8,.16,x,y,backZ+1.50,red);
+        r.rotation.z = 0.34;
+
+        const w = addBox(.56,3.8,.16,x+1.08,y,backZ+1.51,facadeWhite);
+        w.rotation.z = 0.34;
+
+        const b = addBox(.86,3.8,.16,x+1.78,y,backZ+1.52,blue);
+        b.rotation.z = 0.34;
+    }
+
+    stripeBack(-30,5.0);
+    stripeBack(18,9.05);
+    stripeBack(-7,13.1);
+    stripeBack(31,17.0);
+
+    // =========================================================
+    // ด้านซ้ายและขวา : ทำให้รอบตึกมีรายละเอียดครบ
+    // =========================================================
+    function decorateSide(x,side){
+        // แผงผนังหลัก
+        addBox(.28,data.height-.8,data.depth-.7,x,data.height/2,0,facadeWhite);
+
+        // แถบแนวนอนทุกชั้น
+        for(let floor=0; floor<4; floor++){
+            const y = 2.9 + floor*4.05;
+            addBox(.18,.28,data.depth+.25,x,y,0,facadeGray);
+
+            // ช่องหน้าต่างด้านข้าง
+            for(let z=-7; z<=7; z+=4.6){
+                addBox(.14,1.65,3.15,x+side*.10,y,z,glass);
+            }
+        }
+
+        // เสาแนวตั้งด้านข้าง
+        for(let z=-7.5; z<=7.5; z+=5){
+            addBox(.20,17.8,.30,x+side*.13,9.7,z,facadeLight);
+        }
+
+        // กรอบกระจกแนวตั้งบริเวณหัวอาคาร
+        addBox(.18,12.5,5.0,x+side*.18,9.4,0,glass);
+
+        // แถบแดง-ขาว-น้ำเงินแนวตั้ง
+        addBox(.20,5.0,.95,x+side*.22,14.8,-2.0,red);
+        addBox(.20,5.0,.48,x+side*.23,14.8,-.75,facadeWhite);
+        addBox(.20,5.0,.75,x+side*.24,14.8,.20,blue);
+
+        // ชายคาด้านข้าง
+        addBox(.50,.42,data.depth+.90,x+side*.15,data.height-.05,0,facadeWhite);
+    }
+
+    decorateSide(leftX,-1);
+    decorateSide(rightX,1);
+
+    // =========================================================
+    // หลังคาและขอบอาคาร
+    // =========================================================
+    addBox(data.width+2.0,.58,data.depth+1.15,0,data.height+.20,0,facadeWhite);
+    addBox(data.width+1.2,.22,.42,0,data.height+.58,-data.depth/2,facadeGray);
+    addBox(data.width+1.2,.22,.42,0,data.height+.58,data.depth/2,facadeGray);
+
+    // ครีบแนวตั้งบนหลังคา ช่วยให้ทรงอาคารดูใกล้ภาพจริง
+    for(let x=-38; x<=38; x+=12.5){
+        addBox(.32,1.25,.55,x,data.height+.78,0,darkGray);
+    }
+
+    // แผงสีด้านหัวอาคาร
+    addBox(2.2,4.0,.18,-31,17.0,frontZ-1.95,red);
+    addBox(1.0,4.0,.18,-28.6,17.0,frontZ-1.96,facadeWhite);
+    addBox(1.65,4.0,.18,-26.9,17.0,frontZ-1.97,blue);
+
+    // แผงทางเข้า/ป้ายด้านหน้าแบบไม่มีตัวหนังสือ
+    addBox(13.0,2.2,.18,29,2.2,frontZ-1.08,facadeGray);
+    addBox(12.3,1.55,.20,29,2.2,frontZ-1.20,darkGray);
+}
+
+function decorateBuildingID63(data, group){
+    // อาคาร 63
+}
+
+function decorateBuildingID42(data, group){
+    // อาคาร 42
+}
+
+function decorateBuildingID44(data, group){
+    // อาคาร 44
+}
+
+function decorateBuildingID43(data, group){
+    // อาคาร 43
+}
+
+function decorateBuildingID41(data, group){
+    // อาคาร 41 : คณะสถาปัตยกรรมและการออกแบบ
+    // อ้างอิงภาพอาคารจริง: ผนังสีเทา, กรอบแดงบริเวณกระจกชั้นบน,
+    // โถงกระจกด้านหน้า, ใต้กันสาดสีส้ม และเสารับกันสาด
+
+    const white = new THREE.MeshStandardMaterial({
+        color:0xe3e5e6,
+        roughness:.68,
+        metalness:.02
+    });
+
+    const gray = new THREE.MeshStandardMaterial({
+        color:0x858b8f,
+        roughness:.72,
+        metalness:.02
+    });
+
+    const darkGray = new THREE.MeshStandardMaterial({
+        color:0x4f5559,
+        roughness:.75,
+        metalness:.02
+    });
+
+    const glass = new THREE.MeshStandardMaterial({
+        color:0x6fabb3,
+        roughness:.18,
+        metalness:.08,
+        transparent:true,
+        opacity:.72
+    });
+
+    const glassDark = new THREE.MeshStandardMaterial({
+        color:0x214b52,
+        roughness:.2,
+        metalness:.12,
+        transparent:true,
+        opacity:.84
+    });
+
+    const red = new THREE.MeshStandardMaterial({
+        color:0xb93e37,
+        roughness:.58,
+        metalness:.03
+    });
+
+    const orange = new THREE.MeshStandardMaterial({
+        color:0xc84d27,
+        roughness:.62,
+        metalness:.02
+    });
+
+    const addBox = (w,h,d,x,y,z,material) => {
+        const mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(w,h,d),
+            material
+        );
+        mesh.position.set(x,y,z);
+        mesh.userData.building = data;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        group.add(mesh);
+        return mesh;
+    };
+
+    const frontX = -data.width/2-.10;
+
+    // แถบสีส้มขนาดใหญ่ใต้ส่วนยื่นด้านหน้า
+    addBox(5.8,1.1,data.depth+2.2,frontX-2.7,data.height*.30,0,orange);
+
+    // แผ่นใต้กันสาดสีส้ม ยื่นออกจากตัวอาคาร
+    addBox(7.0,.45,data.depth+4.0,frontX-3.5,7.0,0,orange);
+
+    // ขอบกันสาดสีเทาด้านบน
+    addBox(7.4,.55,data.depth+4.4,frontX-3.7,7.45,0,darkGray);
+
+    // เสารับกันสาดด้านหน้า 2 ต้น
+    [-4.8,4.8].forEach(z=>{
+        addBox(.85,7.0,.85,frontX-3.6,3.5,z,white);
+        addBox(1.05,.65,1.05,frontX-3.6,7.0,z,white);
+    });
+
+    // โถงกระจกสูงบริเวณชั้นล่างด้านหน้า
+    addBox(.18,6.8,data.depth-1.6,frontX-.25,4.0,0,glassDark);
+
+    // ช่องกระจกแบ่งเป็นช่วง ๆ
+    for(let i=0;i<5;i++){
+        const z=-6.2+i*3.1;
+        addBox(.16,6.2,.10,frontX-.38,4.0,z,white);
+    }
+
+    // กรอบแดงขนาดใหญ่รอบชุดกระจกชั้นบน
+    const upperY=16.8;
+    const upperH=5.8;
+    const upperD=13.0;
+    addBox(.38,.45,upperD,frontX-.32,upperY+upperH/2,0,red);
+    addBox(.38,.45,upperD,frontX-.32,upperY-upperH/2,0,red);
+    addBox(.38,upperH,.45,frontX-.32,upperY,-6.25,red);
+    addBox(.38,upperH,.45,frontX-.32,upperY,6.25,red);
+
+    // กระจกภายในกรอบแดง
+    addBox(.16,upperH-1.0,upperD-1.0,frontX-.40,upperY,0,glass);
+
+    // เสาแบ่งกระจกแนวตั้ง
+    for(let i=1;i<4;i++){
+        const z=-5.0+i*3.35;
+        addBox(.18,upperH-1.0,.14,frontX-.50,upperY,z,gray);
+    }
+
+    // เส้นคาดแนวนอนบนกระจก
+    for(let i=1;i<3;i++){
+        const y=upperY-2.0+i*2.0;
+        addBox(.18,.16,upperD-1.0,frontX-.50,y,0,gray);
+    }
+
+    // ช่องหน้าต่างแนวยาวด้านข้างอาคาร
+    for(let row=0;row<5;row++){
+        const y=10.0+row*3.0;
+        for(let i=0;i<8;i++){
+            const x=-data.width/2+5+i*6.0;
+            addBox(4.0,1.45,.12,x,y,data.depth/2+.10,glassDark);
+            addBox(4.0,1.45,.12,x,y,-data.depth/2-.10,glassDark);
+        }
+    }
+
+    // ช่องหน้าต่างแนวนอนเล็ก ๆ บนผนังด้านข้าง
+    for(let i=0;i<8;i++){
+        const x=-data.width/2+4+i*6.2;
+        addBox(2.0,.55,.12,x,22.0,data.depth/2+.12,gray);
+        addBox(2.0,.55,.12,x,22.0,-data.depth/2-.12,gray);
+    }
+
+    // แถบสีแดงแนวตั้งด้านข้าง ให้ตรงกับเอกลักษณ์ของอาคารจริง
+    addBox(.35,8.0,.32,-data.width/2+10.0,17.0,data.depth/2+.20,red);
+    addBox(.35,8.0,.32,-data.width/2+10.0,17.0,-data.depth/2-.20,red);
+
+    // ใช้หลังคาเดิมของอาคารจาก createBuilding()
+    // ไม่เพิ่มสันหรือชิ้นส่วนแนวยาวบริเวณกึ่งกลางอาคาร
+}
+
+function decorateBuildingByID(data, group){
+
+    // ID 64 มี 2 ส่วน จึงแยกตามตำแหน่งเดิม
+    if(data.id === 64 && data.x === -59.5 && data.z === -20){
+        decorateBuildingID64_A(data, group);
+        return;
+    }
+
+    if(data.id === 64 && data.x === -48 && data.z === -38){
+        decorateBuildingID64_B(data, group);
+        return;
+    }
+
+    switch(data.id){
+
+        case 52:
+            decorateBuildingID52(data, group);
+            break;
+
+        case 65:
+            decorateBuildingID65(data, group);
+            break;
+
+        case 66:
+            decorateBuildingID66(data, group);
+            break;
+
+        case 69:
+            decorateBuildingID69(data, group);
+            break;
+
+        case 62:
+            decorateBuildingID62(data, group);
+            break;
+
+        case 63:
+            decorateBuildingID63(data, group);
+            break;
+
+        case 42:
+            decorateBuildingID42(data, group);
+            break;
+
+        case 44:
+            decorateBuildingID44(data, group);
+            break;
+
+        case 43:
+            decorateBuildingID43(data, group);
+            break;
+
+        case 41:
+            decorateBuildingID41(data, group);
+            break;
+    }
+}
+
+/* =========================================================
+   จบ ID-SPECIFIC BUILDING DECORATION
+========================================================= */
+
+/* =========================================================
+   BUILDING MATERIALS
+========================================================= */
+
+const windowMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color:0x3a9dce,
+
+        roughness:.25,
+
+        metalness:.15
+
+    });
+
+
+const roofMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color:0x59636b,
+
+        roughness:.8
+
+    });
+
+
+const accentMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color:0xf56b00,
+
+        roughness:.45,
+
+        metalness:.1
+
+    });
+
+
+const frameMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color:0x66727b,
+
+        roughness:.65
+
+    });
+
+
+/* =========================================================
+   CREATE BUILDINGS
+   ความสูงของตัวอาคารยังใช้ data.height เดิมทุกหลัง
+========================================================= */
+
+function createBuilding(
+    data
+){
+
+    const group =
+        new THREE.Group();
+
+
+    group.userData.building =
+        data;
+
+
+    const body =
+        new THREE.Mesh(
+
+            new THREE.BoxGeometry(
+
+                data.width,
+
+                data.height,
+
+                data.depth
+
+            ),
+
+            new THREE.MeshStandardMaterial({
+
+                color:data.color,
+
+                roughness:.72,
+
+                metalness:.05
+
+            })
+
+        );
+
+
+    body.position.y =
+        data.height/2;
+
+
+    body.castShadow =
+        true;
+
+    body.receiveShadow =
+        true;
+
+
+    body.userData.building =
+        data;
+
+
+    group.add(
+        body
+    );
+
+
+
+
+
+    /* =====================================================
+       ROOF
+    ===================================================== */
+
+    const roof =
+        new THREE.Mesh(
+
+            new THREE.BoxGeometry(
+
+                data.width+1.5,
+
+                1.2,
+
+                data.depth+1.5
+
+            ),
+
+            roofMaterial
+
+        );
+
+
+    roof.position.y =
+        data.height+.6;
+
+
+    roof.castShadow =
+        true;
+
+
+    roof.userData.building =
+        data;
+
+
+    group.add(
+        roof
+    );
+
+
+    /* =====================================================
+       VERTICAL FACADE DETAILS
+    ===================================================== */
+
+    const facadeCount =
+        Math.max(
+
+            2,
+
+            Math.floor(
+                data.width/9
+            )
+
+        );
+
+
+    for(
+
+        let i=0;
+
+        i<facadeCount;
+
+        i++
+
+    ){
+
+        const x =
+
+            -data.width/2 +
+
+            (data.width/
+            (facadeCount+1)) *
+
+            (i+1);
+
+
+        const pillar =
+            new THREE.Mesh(
+
+                new THREE.BoxGeometry(
+
+                    .32,
+
+                    Math.max(
+                        3,
+                        data.height-.8
+                    ),
+
+                    .38
+
+                ),
+
+                frameMaterial
+
+            );
+
+
+        pillar.position.set(
+
+            x,
+
+            data.height/2,
+
+            data.depth/2+.24
+
+        );
+
+
+        pillar.userData.building =
+            data;
+
+
+        group.add(
+            pillar
+        );
+
+    }
+
+
+    /* =====================================================
+       FRONT + BACK WINDOWS
+    ===================================================== */
+
+    const rows =
+        Math.max(
+
+            1,
+
+            Math.min(
+
+                4,
+
+                Math.floor(
+                    data.height/5
+                )
+
+            )
+
+        );
+
+
+    const columns =
+        Math.max(
+
+            3,
+
+            Math.floor(
+                data.width/5
+            )
+
+        );
+
+
+    for(
+
+        let row=0;
+
+        row<rows;
+
+        row++
+
+    ){
+
+        const y =
+
+            3 +
+
+            row *
+
+            Math.max(
+
+                3.5,
+
+                (data.height-5) /
+                Math.max(
+                    rows-1,
+                    1
+                )
+
+            );
+
+
+        if(
+            y >
+            data.height-1.5
+        )
+            continue;
+
+
+        for(
+
+            let i=0;
+
+            i<columns;
+
+            i++
+
+        ){
+
+            const spacing =
+
+                data.width /
+                (columns+1);
+
+
+            const x =
+
+                -data.width/2 +
+
+                spacing*(i+1);
+
+
+            const windowFront =
+                new THREE.Mesh(
+
+                    new THREE.BoxGeometry(
+
+                        Math.min(
+                            2.4,
+                            spacing*.58
+                        ),
+
+                        Math.min(
+                            1.8,
+                            Math.max(
+                                1.2,
+                                data.height/10
+                            )
+                        ),
+
+                        .18
+
+                    ),
+
+                    windowMaterial
+
+                );
+
+
+            windowFront.position.set(
+
+                x,
+
+                y,
+
+                data.depth/2+.16
+
+            );
+
+
+            windowFront.userData.building =
+                data;
+
+
+            group.add(
+                windowFront
+            );
+
+
+            const windowBack =
+                windowFront.clone();
+
+
+            windowBack.position.z =
+                -data.depth/2-.16;
+
+
+            group.add(
+                windowBack
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SIDE WINDOWS
+    ===================================================== */
+
+    const sideRows =
+        Math.max(
+
+            1,
+
+            Math.min(
+
+                4,
+
+                Math.floor(
+                    data.height/5
+                )
+
+            )
+
+        );
+
+
+    const sideColumns =
+        Math.max(
+
+            2,
+
+            Math.floor(
+                data.depth/5
+            )
+
+        );
+
+
+    for(
+
+        let row=0;
+
+        row<sideRows;
+
+        row++
+
+    ){
+
+        const y =
+
+            3 +
+
+            row *
+
+            Math.max(
+
+                3.5,
+
+                (data.height-5) /
+                Math.max(
+                    sideRows-1,
+                    1
+                )
+
+            );
+
+
+        if(
+            y >
+            data.height-1.5
+        )
+            continue;
+
+
+        for(
+
+            let i=0;
+
+            i<sideColumns;
+
+            i++
+
+        ){
+
+            const spacing =
+
+                data.depth /
+                (sideColumns+1);
+
+
+            const z =
+
+                -data.depth/2 +
+
+                spacing*(i+1);
+
+
+            const windowSide =
+                new THREE.Mesh(
+
+                    new THREE.BoxGeometry(
+
+                        .18,
+
+                        1.5,
+
+                        Math.min(
+                            2.4,
+                            spacing*.58
+                        )
+
+                    ),
+
+                    windowMaterial
+
+                );
+
+
+            windowSide.position.set(
+
+                data.width/2+.16,
+
+                y,
+
+                z
+
+            );
+
+
+            windowSide.userData.building =
+                data;
+
+
+            group.add(
+                windowSide
+            );
+
+
+            const windowSide2 =
+                windowSide.clone();
+
+
+            windowSide2.position.x =
+                -data.width/2-.16;
+
+
+            group.add(
+                windowSide2
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ORANGE ACCENT BAND
+    ===================================================== */
+
+    const accent =
+        new THREE.Mesh(
+
+            new THREE.BoxGeometry(
+
+                data.width+.08,
+
+                .55,
+
+                .18
+
+            ),
+
+            accentMaterial
+
+        );
+
+
+    accent.position.set(
+
+        0,
+
+        Math.min(
+
+            data.height-1,
+
+            Math.max(
+                4,
+                data.height*.55
+            )
+
+        ),
+
+        data.depth/2+.28
+
+    );
+
+
+    accent.userData.building =
+        data;
+
+
+    group.add(
+        accent
+    );
+
+
+
+
+
+
+
+    /* =====================================================
+       BUILDING LABEL
+    ===================================================== */
+
+    const labelDiv =
+        document.createElement(
+            'div'
+        );
+
+
+    labelDiv.className =
+        'building-label';
+
+
+    labelDiv.textContent =
+        data.name;
+
+
+    const label =
+        new CSS2DObject(
+            labelDiv
+        );
+
+
+    label.position.set(
+
+        0,
+
+        data.height+4,
+
+        0
+
+    );
+
+
+    group.add(
+        label
+    );
+
+
+    group.position.set(
+
+        data.x,
+
+        0,
+
+        data.z
+
+    );
+
+
+    scene.add(
+        group
+    );
+
+    // เรียกใช้การตกแต่งเฉพาะ ID โดยไม่แก้ระบบอื่น
+    decorateBuildingByID(data, group);
+
+
+    data.object =
+        group;
+
+}
+
+
+buildings.forEach(
+    createBuilding
+);
+
+
+/* =========================================================
+   color AREAS
+========================================================= */
+function createGreenArea(
+    x,
+    z,
+    width,
+    length,
+    height = 0.2,
+    color = 0x1B5E20
+) {
+
+    const area =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                width,
+                height,
+                length
+            ),
+            new THREE.MeshStandardMaterial({
+                color: color,
+                roughness: 1
+            })
+        );
+
+    area.position.set(
+        x,
+        height / 2 + 0.05,
+        z
+    );
+
+    scene.add(area);
+
+    return area;
+}
+
+// พื้นที่ 1 — เทา
+createGreenArea(
+    -16.75, 73, 33, 18, 1.2,
+    0x5555445
+);
+
+// พื้นที่ 2 — เขียว
+createGreenArea(
+    -16.75, 73, 30, 15, 1.5,
+    0x1B5E20
+);
+
+// พื้นที่ 3 — แม่น้ำ
+createGreenArea(
+    -100.5, 37, 20, 200, 0.5,
+    0x00008E
+);
+
+// พื้นที่ 4 — ลานเกีย
+createGreenArea(
+    -65.05, 100, 27, 46, 1.5,
+    0xE25845
+);
+
+
+/*gear*/
+function createKMUTNBSign(
+    x,
+    z,
+    width = 25,
+    signHeight = 15,      // ความสูงของป้าย
+    gearHeight = 18,      // ความสูงของเฟือง
+    groundHeight = 0,     // ความสูงจากพื้น
+    rotation = 0,
+    signColor = 0x4FA7A0,
+    gearColor = 0x4FA7A0
+) {
+
+    const group = new THREE.Group();
+
+
+    // =====================================
+    // MATERIAL
+    // =====================================
+
+    const baseMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x888888,
+            roughness: 0.9
+        });
+
+    const signMaterial =
+        new THREE.MeshStandardMaterial({
+            color: signColor,
+            roughness: 0.8
+        });
+
+    const gearMaterial =
+        new THREE.MeshStandardMaterial({
+            color: gearColor,
+            roughness: 0.7,
+            metalness: 0.2
+        });
+
+
+    // =====================================
+    // ฐาน
+    // =====================================
+
+    const base =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                width,
+                0.8,
+                4
+            ),
+            baseMaterial
+        );
+
+    base.position.y = 0.4;
+
+    group.add(base);
+
+
+    // =====================================
+    // เสารองป้าย
+    // =====================================
+
+    const postCount = 9;
+
+    for (
+        let i = 0;
+        i < postCount;
+        i++
+    ) {
+
+        const post =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    0.5,
+                    signHeight * 0.55,
+                    0.5
+                ),
+                baseMaterial
+            );
+
+        const px =
+            -width / 2 +
+            2 +
+            i *
+            (
+                (width - 4) /
+                (postCount - 1)
+            );
+
+        post.position.set(
+            px,
+            signHeight * 0.30,
+            0
+        );
+
+        group.add(post);
+    }
+
+
+    // =====================================
+    // แผ่นป้าย
+    // =====================================
+
+    const sign =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                width,
+                3.5,
+                0.8
+            ),
+            signMaterial
+        );
+
+    sign.position.y =
+        signHeight * 0.62;
+
+    group.add(sign);
+
+
+    // =====================================
+    // ตัวหนังสือ KMUTNB
+    // =====================================
+
+    const canvas =
+        document.createElement('canvas');
+
+    canvas.width = 1024;
+    canvas.height = 256;
+
+    const ctx =
+        canvas.getContext('2d');
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.fillStyle = '#FFFFFF';
+
+    ctx.font =
+        'bold 150px Arial';
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    ctx.fillText(
+        'KMUTNB',
+        canvas.width / 2,
+        canvas.height / 2
+    );
+
+    const texture =
+        new THREE.CanvasTexture(canvas);
+
+    texture.colorSpace =
+        THREE.SRGBColorSpace;
+
+
+    const letters =
+        new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                width * 0.75,
+                2
+            ),
+            new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true
+            })
+        );
+
+    letters.position.set(
+        0,
+        signHeight * 0.62,
+        -0.43
+    );
+
+    letters.rotation.y =
+        Math.PI;
+
+    group.add(letters);
+
+
+    // =====================================
+    // เฟือง
+    // =====================================
+
+    const gearShape =
+        new THREE.Shape();
+
+    const teeth = 12;
+
+    const outerRadius =
+        width * 0.19;
+
+    const innerRadius =
+        width * 0.145;
+
+    const holeRadius =
+        width * 0.055;
+
+
+    for (
+        let i = 0;
+        i <= teeth * 2;
+        i++
+    ) {
+
+        const angle =
+            i /
+            (teeth * 2) *
+            Math.PI *
+            2;
+
+        const radius =
+            i % 2 === 0
+                ? outerRadius
+                : innerRadius;
+
+        const px =
+            Math.cos(angle) * radius;
+
+        const py =
+            Math.sin(angle) * radius;
+
+        if (i === 0) {
+
+            gearShape.moveTo(
+                px,
+                py
+            );
+
+        } else {
+
+            gearShape.lineTo(
+                px,
+                py
+            );
+        }
+    }
+
+    gearShape.closePath();
+
+
+    // รูตรงกลาง
+    const hole =
+        new THREE.Path();
+
+    hole.absarc(
+        0,
+        0,
+        holeRadius,
+        0,
+        Math.PI * 2,
+        true
+    );
+
+    gearShape.holes.push(hole);
+
+
+    // =====================================
+    // สร้างเฟือง 3D
+    // =====================================
+
+    const gearGeometry =
+        new THREE.ExtrudeGeometry(
+            gearShape,
+            {
+                depth: 0.9,
+                bevelEnabled: true,
+                bevelThickness: 0.12,
+                bevelSize: 0.08,
+                bevelSegments: 2
+            }
+        );
+
+    gearGeometry.center();
+
+
+    const gear =
+        new THREE.Mesh(
+            gearGeometry,
+            gearMaterial
+        );
+
+
+    // ใช้ gearHeight แยกจาก signHeight
+    gear.position.set(
+        0,
+        gearHeight,
+        0.1
+    );
+
+    gear.rotation.y =
+        Math.PI;
+
+    group.add(gear);
+
+
+    // =====================================
+    // ตำแหน่งทั้งหมด
+    // =====================================
+
+    group.position.set(
+        x,
+        groundHeight,
+        z
+    );
+
+    group.rotation.y =
+        rotation;
+
+    scene.add(group);
+
+    return group;
+}
+
+createKMUTNBSign(
+    -60.5,
+    85,
+    12,
+    10,     // ป้าย
+    10.5,     // เฟือง
+    2,
+    Math.PI,
+    0x4FA7A0,
+    0x4FA7A0
+);
+
+/*Tree*/
+
+function createTree(
+    x,
+    z,
+    scale = 1,
+    color = 0x2E7D32
+) {
+
+    const tree = new THREE.Group();
+
+    // ลำต้น
+    const trunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            0.6 * scale,
+            0.8 * scale,
+            5 * scale,
+            8
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x6D4C41,
+            roughness: 1
+        })
+    );
+
+    trunk.position.y = 2.5 * scale;
+    tree.add(trunk);
+
+    // ใบไม้
+    const leaves = new THREE.Mesh(
+        new THREE.SphereGeometry(
+            3.2 * scale,
+            12,
+            8
+        ),
+        new THREE.MeshStandardMaterial({
+            color: color,
+            roughness: 1
+        })
+    );
+
+    leaves.position.y = 6 * scale;
+    tree.add(leaves);
+
+    // ตำแหน่งต้นไม้
+    tree.position.set(
+        x,
+        0,
+        z
+    );
+
+    scene.add(tree);
+
+    return tree;
+}
+
+createTree(-26, 72.9, 2, 0x2E7D32);
+
+/*Tree*/
+
+/*Table*/
+
+function createMarbleTableSet(
+    x,
+    z,
+    scale = 1,
+    rotation = 0
+) {
+
+    const group = new THREE.Group();
+
+    // =========================
+    // วัสดุ
+    // =========================
+
+    const marbleMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0xE8E8E8,
+            roughness: 0.6
+        });
+
+    const chairMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x757575,
+            roughness: 0.8
+        });
+
+
+    // =========================
+    // หน้าโต๊ะ
+    // =========================
+
+    const tableTop = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            8 * scale,
+            0.6 * scale,
+            5 * scale
+        ),
+        marbleMaterial
+    );
+
+    tableTop.position.y =
+        5.0 * scale;
+
+    group.add(tableTop);
+
+
+    // =========================
+    // ขาโต๊ะ
+    // =========================
+
+    const tableLeg = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            0.5 * scale,
+            0.6 * scale,
+            4.5 * scale,
+            12
+        ),
+        marbleMaterial
+    );
+
+    tableLeg.position.y =
+        2.5 * scale;
+
+    group.add(tableLeg);
+
+
+    // =========================
+    // สร้างเก้าอี้
+    // =========================
+
+    function createChair(
+        chairX,
+        chairZ
+    ) {
+
+        const chair = new THREE.Group();
+
+        // เบาะนั่ง
+        const seat = new THREE.Mesh(
+            new THREE.BoxGeometry(
+                2.5 * scale,
+                0.5 * scale,
+                2.5 * scale
+            ),
+            chairMaterial
+        );
+
+        seat.position.y =
+            2.2 * scale;
+
+        chair.add(seat);
+
+
+        // ขาเก้าอี้
+        const legPositions = [
+            [-0.8, -0.8],
+            [ 0.8, -0.8],
+            [-0.8,  0.8],
+            [ 0.8,  0.8]
+        ];
+
+        legPositions.forEach(
+            ([lx, lz]) => {
+
+                const leg =
+                    new THREE.Mesh(
+                        new THREE.BoxGeometry(
+                            0.25 * scale,
+                            2.2 * scale,
+                            0.25 * scale
+                        ),
+                        chairMaterial
+                    );
+
+                leg.position.set(
+                    lx * scale,
+                    1.1 * scale,
+                    lz * scale
+                );
+
+                chair.add(leg);
+            }
+        );
+
+        chair.position.set(
+            chairX,
+            0,
+            chairZ
+        );
+
+        group.add(chair);
+    }
+
+
+    // =========================
+    // เก้าอี้ 4 ตัว
+    // =========================
+
+    createChair(
+        0,
+        -5 * scale
+    );
+
+    createChair(
+        0,
+        5 * scale
+    );
+
+    createChair(
+        -5 * scale,
+        0
+    );
+
+    createChair(
+        5 * scale,
+        0
+    );
+
+
+    // =========================
+    // ตำแหน่งชุดโต๊ะ
+    // =========================
+
+    group.position.set(
+        x,
+        1,
+        z
+    );
+
+    group.rotation.y =
+        rotation;
+
+    scene.add(group);
+
+    return group;
+}
+
+createMarbleTableSet(-12, 72.9, 0.8, 0);
+
+/*Table*/
+
+/* =========================================================
+   ⭐ OPEN HOUSE ACTIVITY AREA
+========================================================= */
+
+const activity =
+    new THREE.Group();
+
+
+const size =
+    34;
+
+
+/* BASE */
+
+const base =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            size,
+
+            .35,
+
+            size
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color:0x159125,
+
+            roughness:.9
+
+        })
+
+    );
+
+
+base.position.y =
+    .18;
+
+
+activity.add(
+    base
+);
+
+
+/* FUTSAL */
+/* =========================================================
+   FUTSAL COURT
+========================================================= */
+
+function futsalCourt(
+    x,
+    z,
+    width = 30,
+    length = 50,
+    fenceHeight = 8
+) {
+
+    /* ==============================
+       MATERIALS
+    ============================== */
+
+    const grassMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0xC62828,
+            roughness: 0.8
+        });
+
+    const lineMaterial =
+        new THREE.MeshBasicMaterial({
+            color: 0xffffff
+        });
+
+    const fenceMaterial =
+        new THREE.MeshBasicMaterial({
+            color: 0x0066ff
+        });
+
+    const goalMaterial =
+        new THREE.MeshBasicMaterial({
+            color: 0xffffff
+        });
+
+
+    /* ==============================
+       COURT FLOOR
+    ============================== */
+
+    const court =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                width,
+                0.30,
+                length
+            ),
+            grassMaterial
+        );
+
+    court.position.set(
+        x,
+        0.30,
+        z
+    );
+
+    scene.add(court);
+
+
+    /* ==============================
+       COURT LINES
+    ============================== */
+
+    const lineY = 0.48;
+
+
+    // LEFT
+    const leftLine =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                0.25,
+                0.08,
+                length
+            ),
+            lineMaterial
+        );
+
+    leftLine.position.set(
+        x - width / 2,
+        lineY,
+        z
+    );
+
+    scene.add(leftLine);
+
+
+    // RIGHT
+    const rightLine =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                0.25,
+                0.08,
+                length
+            ),
+            lineMaterial
+        );
+
+    rightLine.position.set(
+        x + width / 2,
+        lineY,
+        z
+    );
+
+    scene.add(rightLine);
+
+
+    // FRONT
+    const frontLine =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                width,
+                0.08,
+                0.25
+            ),
+            lineMaterial
+        );
+
+    frontLine.position.set(
+        x,
+        lineY,
+        z - length / 2
+    );
+
+    scene.add(frontLine);
+
+
+    // BACK
+    const backLine =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                width,
+                0.08,
+                0.25
+            ),
+            lineMaterial
+        );
+
+    backLine.position.set(
+        x,
+        lineY,
+        z + length / 2
+    );
+
+    scene.add(backLine);
+
+
+    /* ==============================
+       CENTER LINE
+    ============================== */
+
+    const centerLine =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                width,
+                0.08,
+                0.20
+            ),
+            lineMaterial
+        );
+
+    centerLine.position.set(
+        x,
+        lineY,
+        z
+    );
+
+    scene.add(centerLine);
+
+
+    /* ==============================
+       CENTER CIRCLE
+    ============================== */
+
+    const centerCircle =
+        new THREE.Mesh(
+            new THREE.RingGeometry(
+                4.5,
+                4.75,
+                64
+            ),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide
+            })
+        );
+
+    centerCircle.rotation.x =
+        -Math.PI / 2;
+
+    centerCircle.position.set(
+        x,
+        lineY + 0.02,
+        z
+    );
+
+    scene.add(centerCircle);
+
+
+    /* ==============================
+       PENALTY AREAS
+    ============================== */
+
+    const penaltyWidth = 12;
+    const penaltyDepth = 6;
+
+
+    // FRONT PENALTY AREA
+
+    const penaltyFront =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                penaltyWidth,
+                0.08,
+                0.20
+            ),
+            lineMaterial
+        );
+
+    penaltyFront.position.set(
+        x,
+        lineY,
+        z - length / 2 + penaltyDepth
+    );
+
+    scene.add(penaltyFront);
+
+
+    // LEFT SIDE OF FRONT PENALTY
+
+    const penaltyFrontLeft =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                0.20,
+                0.08,
+                penaltyDepth
+            ),
+            lineMaterial
+        );
+
+    penaltyFrontLeft.position.set(
+        x - penaltyWidth / 2,
+        lineY,
+        z - length / 2 + penaltyDepth / 2
+    );
+
+    scene.add(penaltyFrontLeft);
+
+
+    // RIGHT SIDE OF FRONT PENALTY
+
+    const penaltyFrontRight =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                0.20,
+                0.08,
+                penaltyDepth
+            ),
+            lineMaterial
+        );
+
+    penaltyFrontRight.position.set(
+        x + penaltyWidth / 2,
+        lineY,
+        z - length / 2 + penaltyDepth / 2
+    );
+
+    scene.add(penaltyFrontRight);
+
+
+    // BACK PENALTY AREA
+
+    const penaltyBack =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                penaltyWidth,
+                0.08,
+                0.20
+            ),
+            lineMaterial
+        );
+
+    penaltyBack.position.set(
+        x,
+        lineY,
+        z + length / 2 - penaltyDepth
+    );
+
+    scene.add(penaltyBack);
+
+
+    // LEFT SIDE BACK
+
+    const penaltyBackLeft =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                0.20,
+                0.08,
+                penaltyDepth
+            ),
+            lineMaterial
+        );
+
+    penaltyBackLeft.position.set(
+        x - penaltyWidth / 2,
+        lineY,
+        z + length / 2 - penaltyDepth / 2
+    );
+
+    scene.add(penaltyBackLeft);
+
+
+    // RIGHT SIDE BACK
+
+    const penaltyBackRight =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                0.20,
+                0.08,
+                penaltyDepth
+            ),
+            lineMaterial
+        );
+
+    penaltyBackRight.position.set(
+        x + penaltyWidth / 2,
+        lineY,
+        z + length / 2 - penaltyDepth / 2
+    );
+
+    scene.add(penaltyBackRight);
+
+
+    /* ==============================
+       FENCE POSTS
+    ============================== */
+
+    const postRadius = 0.12;
+
+    function fencePost(px, pz) {
+
+        const post =
+            new THREE.Mesh(
+                new THREE.CylinderGeometry(
+                    postRadius,
+                    postRadius,
+                    fenceHeight,
+                    10
+                ),
+                fenceMaterial
+            );
+
+        post.position.set(
+            px,
+            fenceHeight / 2,
+            pz
+        );
+
+        scene.add(post);
+    }
+
+
+    // Corner posts
+
+    fencePost(
+        x - width / 2,
+        z - length / 2
+    );
+
+    fencePost(
+        x + width / 2,
+        z - length / 2
+    );
+
+    fencePost(
+        x - width / 2,
+        z + length / 2
+    );
+
+    fencePost(
+        x + width / 2,
+        z + length / 2
+    );
+
+
+    // Extra posts along sides
+
+    const postSpacing = 5;
+
+
+    for (
+        let p = -length / 2 + postSpacing;
+        p < length / 2;
+        p += postSpacing
+    ) {
+
+        fencePost(
+            x - width / 2,
+            z + p
+        );
+
+        fencePost(
+            x + width / 2,
+            z + p
+        );
+    }
+
+
+    /* ==============================
+       BLUE NET FENCE
+    ============================== */
+
+    function createFence(
+        px,
+        py,
+        pz,
+        w,
+        h,
+        d
+    ) {
+
+        const fence =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    w,
+                    h,
+                    d
+                ),
+                new THREE.MeshBasicMaterial({
+                    color: 0x0066ff,
+                    transparent: true,
+                    opacity: 0.25,
+                    wireframe: true
+                })
+            );
+
+        fence.position.set(
+            px,
+            py,
+            pz
+        );
+
+        scene.add(fence);
+    }
+
+
+    // LEFT FENCE
+
+    createFence(
+        x - width / 2,
+        fenceHeight / 2,
+        z,
+        0.15,
+        fenceHeight,
+        length
+    );
+
+
+    // RIGHT FENCE
+
+    createFence(
+        x + width / 2,
+        fenceHeight / 2,
+        z,
+        0.15,
+        fenceHeight,
+        length
+    );
+
+
+    // FRONT FENCE
+
+    createFence(
+        x,
+        fenceHeight / 2,
+        z - length / 2,
+        width,
+        fenceHeight,
+        0.15
+    );
+
+
+    // BACK FENCE
+
+    createFence(
+        x,
+        fenceHeight / 2,
+        z + length / 2,
+        width,
+        fenceHeight,
+        0.15
+    );
+
+
+    /* ==============================
+       GOALS
+    ============================== */
+
+    function createGoal(goalZ) {
+
+        const goalWidth = 6;
+        const goalHeight = 2.4;
+
+
+        // LEFT POST
+
+        const leftPost =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    0.25,
+                    goalHeight,
+                    0.25
+                ),
+                goalMaterial
+            );
+
+        leftPost.position.set(
+            x - goalWidth / 2,
+            goalHeight / 2,
+            goalZ
+        );
+
+        scene.add(leftPost);
+
+
+        // RIGHT POST
+
+        const rightPost =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    0.25,
+                    goalHeight,
+                    0.25
+                ),
+                goalMaterial
+            );
+
+        rightPost.position.set(
+            x + goalWidth / 2,
+            goalHeight / 2,
+            goalZ
+        );
+
+        scene.add(rightPost);
+
+
+        // CROSSBAR
+
+        const crossbar =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    goalWidth,
+                    0.25,
+                    0.25
+                ),
+                goalMaterial
+            );
+
+        crossbar.position.set(
+            x,
+            goalHeight,
+            goalZ
+        );
+
+        scene.add(crossbar);
+    }
+
+
+    createGoal(
+        z - length / 2
+    );
+
+    createGoal(
+        z + length / 2
+    );
+}
+
+
+/* =========================================================
+   FUTSAL COURT POSITION
+========================================================= */
+
+futsalCourt(
+    41,   // X
+    37.25,    // Z
+    16.5,    // Width
+    31.5,    // Length
+    11.5     // Fence height
+);
+/* FUTSAL */
+
+/* LABEL */
+
+const activityLabelDiv =
+    document.createElement(
+        'div'
+    );
+
+
+activityLabelDiv.className =
+    'building-label';
+
+
+activityLabelDiv.textContent =
+    'พื้นที่กิจกรรม Open-House';
+
+
+const activityLabel =
+    new CSS2DObject(
+        activityLabelDiv
+    );
+
+
+activityLabel.position.set(
+
+    0,
+
+    3,
+
+    0
+
+);
+
+
+activity.add(
+    activityLabel
+);
+
+
+/* ⭐ POSITION */
+
+activity.position.set(
+
+    42,
+
+    0,
+
+    37.5
+
+);
+
+
+scene.add(
+    activity
+);
+
+
+/* =========================================================
+   RAYCASTER
+========================================================= */
+
+const raycaster =
+    new THREE.Raycaster();
+
+
+const mouse =
+    new THREE.Vector2();
+
+
+renderer.domElement.addEventListener(
+
+    'click',
+
+    event => {
+
+
+        mouse.x =
+
+            event.clientX /
+            window.innerWidth *
+            2 - 1;
+
+
+        mouse.y =
+
+            -(
+
+                event.clientY /
+                window.innerHeight
+
+            ) *
+            2 + 1;
+
+
+        raycaster.setFromCamera(
+
+            mouse,
+
+            camera
+
+        );
+
+
+        const targets = [];
+
+
+        buildings.forEach(
+
+            b => {
+
+                b.object.traverse(
+
+                    child => {
+
+                        if(
+                            child.isMesh
+                        ){
+
+                            targets.push(
+                                child
+                            );
+
+                        }
+
+                    }
+
+                );
+
+            }
+
+        );
+
+
+        const hits =
+            raycaster.intersectObjects(
+                targets
+            );
+
+
+        if(
+            hits.length === 0
+        ){
+
+            return;
+
+        }
+
+
+        const data =
+
+            hits[0]
+                .object
+                .userData
+                .building;
+
+
+        if(data){
+
+            showBuilding(
+                data
+            );
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   SHOW BUILDING
+========================================================= */
+
+function showBuilding(
+    data
+){
+
+    document.getElementById(
+        'buildingType'
+    ).textContent =
+        data.type;
+
+
+    document.getElementById(
+        'buildingTitle'
+    ).textContent =
+        data.name;
+
+
+    document.getElementById(
+        'buildingDescription'
+    ).textContent =
+        data.description;
+
+
+    const list =
+        document.getElementById(
+            'departmentList'
+        );
+
+
+    list.innerHTML =
+        '';
+
+
+    data.departments.forEach(
+
+        department => {
+
+            const li =
+                document.createElement(
+                    'li'
+                );
+
+
+            li.textContent =
+                department;
+
+
+            list.appendChild(
+                li
+            );
+
+        }
+
+    );
+
+
+    document.getElementById(
+        'infoPanel'
+    ).classList.add(
+        'show'
+    );
+
+
+    focusBuilding(
+        data
+    );
+
+}
+
+
+/* =========================================================
+   FOCUS BUILDING
+========================================================= */
+
+function focusBuilding(
+    data
+){
+
+    const target =
+        new THREE.Vector3(
+
+            data.x,
+
+            0,
+
+            data.z
+
+        );
+
+
+    const position =
+        new THREE.Vector3(
+
+            data.x+42,
+
+            48,
+
+            data.z+42
+
+        );
+
+
+    animateCamera(
+
+        position,
+
+        target
+
+    );
+
+}
+
+
+/* =========================================================
+   CAMERA ANIMATION
+========================================================= */
+
+function animateCamera(
+
+    position,
+
+    target
+
+){
+
+    const startPosition =
+        camera.position.clone();
+
+
+    const startTarget =
+        controls.target.clone();
+
+
+    const start =
+        performance.now();
+
+
+    const duration =
+        600;
+
+
+    function update(){
+
+        const t =
+            Math.min(
+
+                (performance.now()-start) /
+                duration,
+
+                1
+
+            );
+
+
+        const ease =
+
+            1 -
+
+            Math.pow(
+
+                1-t,
+
+                3
+
+            );
+
+
+        camera.position.lerpVectors(
+
+            startPosition,
+
+            position,
+
+            ease
+
+        );
+
+
+        controls.target.lerpVectors(
+
+            startTarget,
+
+            target,
+
+            ease
+
+        );
+
+
+        if(
+            t<1
+        ){
+
+            requestAnimationFrame(
+                update
+            );
+
+        }
+
+    }
+
+
+    update();
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function searchBuilding(){
+
+    const keyword =
+
+        document.getElementById(
+            'searchInput'
+        ).value
+
+        .trim()
+
+        .toLowerCase();
+
+
+    if(
+        !keyword
+    ){
+
+        document.getElementById(
+            'searchResult'
+        ).textContent =
+            'กรุณาพิมพ์คำค้นหา';
+
+        return;
+
+    }
+
+
+    const found =
+
+        buildings.find(
+
+            building => {
+
+                const text = (
+
+                    building.name +
+
+                    ' ' +
+
+                    building.type +
+
+                    ' ' +
+
+                    building.description +
+
+                    ' ' +
+
+                    building.departments.join(' ')
+
+                ).toLowerCase();
+
+
+                return text.includes(
+                    keyword
+                );
+
+            }
+
+        );
+
+
+    if(
+        !found
+    ){
+
+        document.getElementById(
+            'searchResult'
+        ).textContent =
+            'ไม่พบข้อมูล';
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        'searchResult'
+    ).textContent =
+        `พบ ${found.name}`;
+
+
+    showBuilding(
+        found
+    );
+
+}
+
+
+document.getElementById(
+    'searchButton'
+).onclick =
+    searchBuilding;
+
+
+document.getElementById(
+    'searchInput'
+).addEventListener(
+
+    'keydown',
+
+    e => {
+
+        if(
+            e.key === 'Enter'
+        ){
+
+            searchBuilding();
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   CLOSE INFO
+========================================================= */
+
+document.getElementById(
+    'closeButton'
+).onclick =
+    () => {
+
+        document.getElementById(
+            'infoPanel'
+        ).classList.remove(
+            'show'
+        );
+
+    };
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+const defaultPosition =
+    new THREE.Vector3(
+
+        175,
+
+        125,
+
+        125
+
+    );
+
+
+const defaultTarget =
+    new THREE.Vector3(
+
+        0,
+
+        0,
+
+        10
+
+    );
+
+
+document.getElementById(
+    'resetButton'
+).onclick =
+    () => {
+
+        document.getElementById(
+            'infoPanel'
+        ).classList.remove(
+            'show'
+        );
+
+
+        animateCamera(
+
+            defaultPosition,
+
+            defaultTarget
+
+        );
+
+    };
+
+
+/* =========================================================
+   FRONT VIEW
+========================================================= */
+
+document.getElementById(
+    'frontButton'
+).onclick =
+    () => {
+
+        animateCamera(
+
+            new THREE.Vector3(
+
+                0,
+
+                100,
+
+                200
+
+            ),
+
+            new THREE.Vector3(
+
+                0,
+
+                0,
+
+                10
+
+            )
+
+        );
+
+    };
+
+
+/* =========================================================
+   ZOOM IN
+========================================================= */
+
+document.getElementById(
+    'zoomInButton'
+).onclick =
+    () => {
+
+        const direction =
+
+            new THREE.Vector3()
+
+                .subVectors(
+
+                    camera.position,
+
+                    controls.target
+
+                );
+
+
+        direction.multiplyScalar(
+            .78
+        );
+
+
+        camera.position.copy(
+
+            controls.target
+
+                .clone()
+
+                .add(direction)
+
+        );
+
+    };
+
+
+/* =========================================================
+   ZOOM OUT
+========================================================= */
+
+document.getElementById(
+    'zoomOutButton'
+).onclick =
+    () => {
+
+        const direction =
+
+            new THREE.Vector3()
+
+                .subVectors(
+
+                    camera.position,
+
+                    controls.target
+
+                );
+
+
+        direction.multiplyScalar(
+            1.28
+        );
+
+
+        camera.position.copy(
+
+            controls.target
+
+                .clone()
+
+                .add(direction)
+
+        );
+
+    };
+
+
+/* =========================================================
+   GOOGLE MAPS
+========================================================= */
+
+document.getElementById(
+    'mapsButton'
+).onclick =
+    () => {
+
+        window.open(
+
+            'https://maps.app.goo.gl/FmnhMDGmunk9d7Z6A',
+
+            '_blank'
+
+        );
+
+    };
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+
+    'resize',
+
+    () => {
+
+
+        camera.aspect =
+
+            window.innerWidth /
+            window.innerHeight;
+
+
+        camera.updateProjectionMatrix();
+
+
+        renderer.setSize(
+
+            window.innerWidth,
+
+            window.innerHeight
+
+        );
+
+
+        labelRenderer.setSize(
+
+            window.innerWidth,
+
+            window.innerHeight
+
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    controls.update();
+
+
+    renderer.render(
+
+        scene,
+
+        camera
+
+    );
+
+
+    labelRenderer.render(
+
+        scene,
+
+        camera
+
+    );
+
+}
+
+
+animate();
+
+
+</script>
+
+</body>
+</html>
